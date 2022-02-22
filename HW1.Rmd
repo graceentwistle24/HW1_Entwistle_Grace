@@ -1,0 +1,45 @@
+---
+title: "STAA 566 ggplot2"
+author: "Grace Entwistle"
+date: "2/3/2022"
+output: html_document
+knit: (function(input_file, encoding) {
+  out_dir <- 'docs';
+  rmarkdown::render(input_file,
+ encoding=encoding,
+ output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(ggthemes)
+##read in data
+disasters <- read.csv("C:/Users/grace/OneDrive/Documents/MSStats/STAA566/World Disaster Data 1960-2018.csv")
+
+```
+
+
+```{r}
+#summarize data for graphic
+by.country <- disasters %>% 
+  group_by(country, year, disastertype) %>% 
+  summarise("TotalNum" = n())
+```
+
+
+```{r}
+us.chart <- ggplot(data = by.country %>% filter(country == "United States"), mapping = aes(x = year, y = TotalNum)) 
+us.chart +
+  geom_line(aes(color = disastertype)) +
+  theme_tufte(base_size = 14) +
+  ggtitle("Natural Disasters in the United States from 1960 to 2018") +
+  xlab("Year") + ylab("Total Number") +
+  scale_y_continuous(breaks = seq(0, 300, by = 50))
+```
+
